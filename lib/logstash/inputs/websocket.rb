@@ -7,7 +7,6 @@ require "socket"
 # Read events over the websocket protocol.
 class LogStash::Inputs::Websocket < LogStash::Inputs::Base
   config_name "websocket"
-  milestone 1
 
   default :codec, "json"
 
