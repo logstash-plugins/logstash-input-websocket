@@ -10,18 +10,13 @@ class LogStash::Inputs::Websocket < LogStash::Inputs::Base
 
   default :codec, "json"
 
-  # The url to connect to or serve from
-  config :url, :validate => :string, :default => "0.0.0.0"
+  # The URL to connect to.
+  config :url, :validate => :string, :required => true
 
-  # Operate as a client or a server.
-  #
-  # Client mode causes this plugin to connect as a websocket client
-  # to the URL given. It expects to receive events as websocket messages.
-  #
-  # (NOT IMPLEMENTED YET) Server mode causes this plugin to listen on
-  # the given URL for websocket clients. It expects to receive events
-  # as websocket messages from these clients.
-  config :mode, :validate => [ "server", "client" ], :default => "client"
+  # Select the plugin's mode of operation. Right now only client mode
+  # is supported, i.e. this plugin connects to a websocket server and
+  # receives events from the server as websocket messages.
+  config :mode, :validate => ["client"], :default => "client"
 
   def register
     require "ftw"
@@ -29,7 +24,6 @@ class LogStash::Inputs::Websocket < LogStash::Inputs::Base
 
   public
   def run(output_queue)
-    # TODO(sissel): Implement server mode.
     agent = FTW::Agent.new
     begin
       websocket = agent.websocket!(@url)
