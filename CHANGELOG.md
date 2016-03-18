@@ -1,3 +1,5 @@
+# 3.0.1
+  - New dependency requirements for logstash-core for the 5.0 release
 ## 3.0.0
  - The "mode" option's "server" value has been removed since server mode
    isn't supported (and never has been). This could potentially affect
