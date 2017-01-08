@@ -1,3 +1,7 @@
+## 4.0.0
+ - internal: Upgrade event API dependency to support Logstash 2.4 & 5.x.
+ - internal: Bump dependency to ftw library to fix compatibility problem.
+
 ## 3.0.2
  - Depend on logstash-core-plugin-api instead of logstash-core,
    removing the need to mass update plugins on major releases of
