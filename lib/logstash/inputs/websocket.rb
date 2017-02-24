@@ -18,6 +18,12 @@ class LogStash::Inputs::Websocket < LogStash::Inputs::Base
   # receives events from the server as websocket messages.
   config :mode, :validate => ["client"], :default => "client"
 
+  # Some websocket APIs require that you send a subscribe message of
+  # some kind when you have connected in order to recieve any
+  # data. Set a value here if you would like this client to 
+  # send a message to the websocket server on connect.
+  config :on_connect, :validate => :string, :required => false
+  
   def register
     require "ftw"
   end # def register
@@ -27,6 +33,11 @@ class LogStash::Inputs::Websocket < LogStash::Inputs::Base
     agent = FTW::Agent.new
     begin
       websocket = agent.websocket!(@url)
+      
+      if @on_connect && @on_connect != ""
+        websocket.publish(@on_connect)
+      end # if
+  
       websocket.each do |payload|
         @codec.decode(payload) do |event|
           decorate(event)
