@@ -1,3 +1,6 @@
+## 4.0.2
+  - Fix some documentation issues
+
 ## 4.0.0
  - internal: Upgrade event API dependency to support Logstash 2.4 & 5.x.
  - internal: Bump dependency to ftw library to fix compatibility problem.
