@@ -13,6 +13,9 @@ class LogStash::Inputs::Websocket < LogStash::Inputs::Base
   # The URL to connect to.
   config :url, :validate => :string, :required => true
 
+  # Retry interval.
+  config :retry, :validate => :number, :default => 1
+
   # Select the plugin's mode of operation. Right now only client mode
   # is supported, i.e. this plugin connects to a websocket server and
   # receives events from the server as websocket messages.
@@ -36,8 +39,18 @@ class LogStash::Inputs::Websocket < LogStash::Inputs::Base
     rescue => e
       @logger.warn("websocket input client threw exception, restarting",
                    :exception => e)
-      sleep(1)
+      # Ensure all connections are cleaned up before retrying.
+      begin
+        agent.shutdown()
+      rescue => e
+        @logger.warn("websocket input client exception on shutdown",
+                     :exception => e)
+      end
+      sleep(@retry)
       retry
+    ensure
+      # Ensure all connections are cleaned up.
+      agent.shutdown()
     end # begin
   end # def run
 
