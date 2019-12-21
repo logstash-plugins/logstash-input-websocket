@@ -1,3 +1,8 @@
+## 4.0.5
+  - Fix socket leaks
+  - Add configuration for connection retrying with backoff.
+  - Add support for plugin shutdown.
+
 ## 4.0.4
   - Docs: Set the default_codec doc attribute.
 
