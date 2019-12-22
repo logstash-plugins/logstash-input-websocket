@@ -33,6 +33,10 @@ This plugin supports the following configuration options plus the <<plugins-{typ
 |Setting |Input type|Required
 | <<plugins-{type}s-{plugin}-mode>> |<<string,string>>, one of `["client"]`|No
 | <<plugins-{type}s-{plugin}-url>> |<<string,string>>|Yes
+| <<plugins-{type}s-{plugin}-retry_initial>> |<<number,number>>|No
+| <<plugins-{type}s-{plugin}-retry_max>> |<<number,number>>|No
+| <<plugins-{type}s-{plugin}-retry_reset>> |<<number,number>>|No
+| <<plugins-{type}s-{plugin}-warn_404>> |<<boolean,boolean>>|No
 |=======================================================================
 
 Also see <<plugins-{type}s-{plugin}-common-options>> for a list of options supported by all
@@ -41,7 +45,7 @@ input plugins.
 &nbsp;
 
 [id="plugins-{type}s-{plugin}-mode"]
-===== `mode` 
+===== `mode`
 
   * Value can be any of: `client`
   * Default value is `"client"`
@@ -51,7 +55,7 @@ is supported, i.e. this plugin connects to a websocket server and
 receives events from the server as websocket messages.
 
 [id="plugins-{type}s-{plugin}-url"]
-===== `url` 
+===== `url`
 
   * This is a required setting.
   * Value type is <<string,string>>
@@ -59,7 +63,41 @@ receives events from the server as websocket messages.
 
 The URL to connect to.
 
+[id="plugins-{type}s-{plugin}-retry_initial"]
+===== `retry_initial`
 
+  * Value type is <<number,number>>
+  * Default values is `1`
+
+The retry interval connections start with.
+
+[id="plugins-{type}s-{plugin}-retry_max"]
+===== `retry_max`
+
+  * Value type is <<number,number>>
+  * Default values is `60`
+
+The maximum retry interval backoff will increase too.
+
+[id="plugins-{type}s-{plugin}-retry_reset"]
+===== `retry_reset`
+
+  * Value type is <<number,number>>
+  * Default values is `20`
+
+The number of log entries that have to be processed before
+the retry interval is reset to retry_initial. This allows
+connections to quickly recover from a small interruption
+after we have successfully connected and processed some
+entries.
+
+[id="plugins-{type}s-{plugin}-warn_404"]
+===== `warn_404`
+
+  * Value type is <<boolean,boolean>>
+  * Default values is `true`
+
+Logs 404 responses as warnings if true otherwise as debug.
 
 [id="plugins-{type}s-{plugin}-common-options"]
 include::{include_path}/{type}.asciidoc[]
