@@ -19,7 +19,10 @@ class LogStash::Inputs::Websocket < LogStash::Inputs::Base
   config :retry_max, :validate => :number, :default => 60
 
   # The number of log entries that have to be processed before
-  # the retry interval is reset to retry_initial.
+  # the retry interval is reset to retry_initial. This allows
+  # connections to quickly recover from a small interruption
+  # after we have successfully connected and processed some
+  # entries.
   config :retry_reset, :validate => :number, :default => 20
 
   # Logs 404 responses as warnings if true otherwise as debug.
@@ -111,10 +114,8 @@ class LogStash::Inputs::Websocket < LogStash::Inputs::Base
   def backoff()
     if @processed > @retry_reset
       @interval = @retry_initial
-    elsif @interval * 2 >= @retry_max
-      @interval = @retry_max
     else
-      @interval = @interval * 2
+      @interval = [@interval * 2, @retry_max].min
     end
   end # def backoff
 
