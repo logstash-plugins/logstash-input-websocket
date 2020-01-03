@@ -12,10 +12,10 @@ class LogStash::Inputs::Websocket < LogStash::Inputs::Base
   # The URL to connect to.
   config :url, :validate => :string, :required => true
 
-  # The retry interval connections start with.
+  # The retry interval in seconds connections start with.
   config :retry_initial, :validate => :number, :default => 1
 
-  # The maximum retry interval backoff will increase too.
+  # The maximum retry interval in seconds backoff will increase too.
   config :retry_max, :validate => :number, :default => 60
 
   # The number of log entries that have to be processed before
@@ -23,10 +23,11 @@ class LogStash::Inputs::Websocket < LogStash::Inputs::Base
   # connections to quickly recover from a small interruption
   # after we have successfully connected and processed some
   # entries.
-  config :retry_reset, :validate => :number, :default => 20
+  config :retry_reset, :validate => :number, :default => 1
 
-  # Logs 404 responses as warnings if true otherwise as debug.
-  config :warn_404, :validated => :boolean, :default => true
+  # Logs responses with the given HTTP status codes as debug instead
+  # of warning.
+  config :debug_status, :default => [404]
 
   # Select the plugin's mode of operation. Right now only client mode
   # is supported, i.e. this plugin connects to a websocket server and
@@ -80,19 +81,19 @@ class LogStash::Inputs::Websocket < LogStash::Inputs::Base
         end
       end
     elsif r.instance_of?(FTW::Response)
-      if r.status != 404 || @warn_404
-        @logger.warn("Connect failed",
+      if @debug_status.include?(r.status)
+        @logger.debug("Request failed",
                      :status => r.status_line,
                      :url => @url_safe,
                      :retry => @interval) unless stop?
       else
-        @logger.debug("Connect failed",
+        @logger.warn("Request failed",
                      :status => r.status_line,
                      :url => @url_safe,
                      :retry => @interval) unless stop?
       end
     else
-      @logger.warn("Connect unexpected type",
+      @logger.warn("Request unexpected type",
                    :type => r.class.name,
                    :url => @url_safe,
                    :retry => @interval) unless stop?
