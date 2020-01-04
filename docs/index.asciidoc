@@ -48,7 +48,7 @@ input plugins.
 ===== `debug_status`
 
   * Value type is <<array,array>>
-  * Default value is `[404]`
+  * Default value is `[]`
 
 Logs responses with the given HTTP status codes as debug instead
 of warning.

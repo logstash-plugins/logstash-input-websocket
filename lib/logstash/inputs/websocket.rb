@@ -27,7 +27,7 @@ class LogStash::Inputs::Websocket < LogStash::Inputs::Base
 
   # Logs responses with the given HTTP status codes as debug instead
   # of warning.
-  config :debug_status, :default => [404]
+  config :debug_status, :valdate => :array, :default => []
 
   # Select the plugin's mode of operation. Right now only client mode
   # is supported, i.e. this plugin connects to a websocket server and
@@ -39,9 +39,7 @@ class LogStash::Inputs::Websocket < LogStash::Inputs::Base
     require "uri"
 
     p = URI.parse(@url)
-    if p.userinfo != ""
-      p.userinfo = "***:***"
-    end
+    p.userinfo = "***:***" unless p.userinfo.nil?
 
     @url_safe = p.to_s
     @interval = @retry_initial
