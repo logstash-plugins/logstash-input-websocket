@@ -31,7 +31,11 @@ This plugin supports the following configuration options plus the <<plugins-{typ
 [cols="<,<,<",options="header",]
 |=======================================================================
 |Setting |Input type|Required
+| <<plugins-{type}s-{plugin}-debug_status>> |<<array,array>>|No
 | <<plugins-{type}s-{plugin}-mode>> |<<string,string>>, one of `["client"]`|No
+| <<plugins-{type}s-{plugin}-retry_initial>> |<<number,number>>|No
+| <<plugins-{type}s-{plugin}-retry_max>> |<<number,number>>|No
+| <<plugins-{type}s-{plugin}-retry_reset>> |<<number,number>>|No
 | <<plugins-{type}s-{plugin}-url>> |<<string,string>>|Yes
 |=======================================================================
 
@@ -40,8 +44,17 @@ input plugins.
 
 &nbsp;
 
+[id="plugins-{type}s-{plugin}-debug_status"]
+===== `debug_status`
+
+  * Value type is <<array,array>>
+  * Default value is `[]`
+
+Logs responses with the given HTTP status codes as debug instead
+of warning.
+
 [id="plugins-{type}s-{plugin}-mode"]
-===== `mode` 
+===== `mode`
 
   * Value can be any of: `client`
   * Default value is `"client"`
@@ -50,16 +63,42 @@ Select the plugin's mode of operation. Right now only client mode
 is supported, i.e. this plugin connects to a websocket server and
 receives events from the server as websocket messages.
 
+[id="plugins-{type}s-{plugin}-retry_initial"]
+===== `retry_initial`
+
+  * Value type is <<number,number>>
+  * Default value is `1`
+
+The retry interval in seconds connections start with.
+
+[id="plugins-{type}s-{plugin}-retry_max"]
+===== `retry_max`
+
+  * Value type is <<number,number>>
+  * Default value is `60`
+
+The maximum retry interval in seconds backoff will increase to.
+
+[id="plugins-{type}s-{plugin}-retry_reset"]
+===== `retry_reset`
+
+  * Value type is <<number,number>>
+  * Default value is `1`
+
+The number of log entries that have to be processed before
+the retry interval is reset to retry_initial. This allows
+connections to quickly recover from a small interruption
+after we have successfully connected and processed some
+entries.
+
 [id="plugins-{type}s-{plugin}-url"]
-===== `url` 
+===== `url`
 
   * This is a required setting.
   * Value type is <<string,string>>
   * There is no default value for this setting.
 
 The URL to connect to.
-
-
 
 [id="plugins-{type}s-{plugin}-common-options"]
 include::{include_path}/{type}.asciidoc[]
