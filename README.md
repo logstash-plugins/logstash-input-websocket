@@ -1,6 +1,6 @@
 # Logstash Plugin
 
-[![Travis Build Status](https://travis-ci.org/logstash-plugins/logstash-input-websocket.svg)](https://travis-ci.org/logstash-plugins/logstash-input-websocket)
+[![Travis Build Status](https://travis-ci.com/logstash-plugins/logstash-input-websocket.svg)](https://travis-ci.com/logstash-plugins/logstash-input-websocket)
 
 This is a plugin for [Logstash](https://github.com/elastic/logstash).
 
